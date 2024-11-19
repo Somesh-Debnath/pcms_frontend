@@ -1,0 +1,21 @@
+Problem statement
+The purpose of the requirements document is to systematically capture requirements for the project and the 
+system “Power Consumer Management System” to be developed. The application should be Cloud Native Architecture 
+with Microservice. Both functional and non-functional requirements are captured in this document. It also 
+serves as the input for the project scoping.
+
+About the System
+Power Consumer Management System (PCMS)is basically a system that helps to maintain the Customer details and plan details. It also 
+allows to search a Plan details based on location and allow end users to manage plan with ease.
+The following section will cover aspects related to Customer Management System.
+a) Customer Registration.
+b) Plan Addup.
+c) Search Plan & Usage details.
+
+Scope of the System
+The scope of the system is explained through its modules as follows
+
+• User Registration -User should submits the details into the system & Admin should approve the user.
+• Map Plan- once Customer Registration is done, user can select paln based on location and admin will verify and approve plan. The system will generate monthly bill and usage details based on plan.
+• Search plan & Usage details- Search plan and usage details. The system will provide a search engine mechanism to find the 
+plan. This will access the database by getting the details based on user search criteria
