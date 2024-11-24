@@ -1,7 +1,7 @@
 
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import PlansPage from "../pages/PlansPage";
-import RegistrationForm from "../components/RegistrationForm";
+import RegistrationForm from "../pages/RegistrationForm";
 import ApproveRegistrationsPage from "../pages/ApproveRegistrationsPage";
 import ApproveRequestedPlan from "../pages/ApproveRequestedPlan";
 

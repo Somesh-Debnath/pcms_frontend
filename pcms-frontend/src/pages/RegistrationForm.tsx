@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import Image from "../assets/image.png";
-interface FormData {
+import { registerCustomer } from "../services/CustomerRegistration";
+
+export interface FormData {
   fullName: string;
   phoneNumber: string;
   mailId: string;
@@ -46,7 +48,7 @@ const RegistrationForm = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const newErrors: Partial<FormData> = {};
     Object.keys(formData).forEach((key) => {
@@ -58,9 +60,15 @@ const RegistrationForm = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      console.log("Form submitted:", formData);
+      try {
+        const response = await registerCustomer(formData);
+        console.log("Registration successful:", response);
+      } catch (error) {
+        console.error("There was an error registering the customer:", error);
+      }
     }
   };
+
 
   const handleReset = () => {
     setFormData({
@@ -116,7 +124,7 @@ const RegistrationForm = () => {
             {/* Phone Number Input */}
             <div className="relative">
               <input
-                type="tel"
+                type="number"
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
