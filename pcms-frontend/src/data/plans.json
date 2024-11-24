@@ -1,0 +1,15 @@
+[
+    {
+      "id": 1,
+      "location": "Ohio",
+      "planName": "Super Saver",
+      "price": 123
+    },
+    {
+      "id": 2,
+      "location": "Texas",
+      "planName": "Basic Saver",
+      "price": 99
+    }
+  ]
+  

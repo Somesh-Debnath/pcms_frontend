@@ -1,0 +1,19 @@
+[
+    {
+      "id": 1,
+      "name": "John Doe",
+      "email": "sample@xyz.com",
+      "mobile": "(412)-456-1234",
+      "address": "12, Kirkham Drive, Highland Creed, Florida, USA",
+      "zip": "1234"
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "email": "jane@abc.com",
+      "mobile": "(987)-654-3210",
+      "address": "45, Downtown Street, New York, USA",
+      "zip": "5678"
+    }
+  ]
+  
