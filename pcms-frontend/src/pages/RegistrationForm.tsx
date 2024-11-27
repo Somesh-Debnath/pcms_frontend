@@ -1,6 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import Image from "../assets/image.png";
 import { registerCustomer } from "../services/CustomerRegistration";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export interface FormData {
   fullName: string;
@@ -62,13 +64,14 @@ const RegistrationForm = () => {
     } else {
       try {
         const response = await registerCustomer(formData);
+        toast.success("User registered successfully! Await admin approval.");
         console.log("Registration successful:", response);
       } catch (error) {
+        toast.error("There was an error registering the customer.");
         console.error("There was an error registering the customer:", error);
       }
     }
   };
-
 
   const handleReset = () => {
     setFormData({
@@ -112,7 +115,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("fullName")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -154,7 +157,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("mailId")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -166,7 +169,7 @@ const RegistrationForm = () => {
             {/* SSN Input */}
             <div className="relative">
               <input
-                type="text"
+                type="number"
                 name="ssn"
                 value={formData.ssn}
                 onChange={handleChange}
@@ -178,7 +181,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("ssn")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -204,7 +207,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("addressLine1")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -228,7 +231,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("addressLine2")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -254,7 +257,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("password")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -278,7 +281,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("confirmPassword")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -304,7 +307,7 @@ const RegistrationForm = () => {
                 <button
                   type="button"
                   onClick={() => handleClear("zipCode")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
@@ -337,6 +340,7 @@ const RegistrationForm = () => {
       <footer className="absolute bottom-0 bg-[#5B9B6B] w-full text-center py-4 border-t">
         <p className="text-white">All Rights Reserved</p>
       </footer>
+      <ToastContainer />
     </div>
   );
 };

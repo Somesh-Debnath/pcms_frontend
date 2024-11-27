@@ -1,7 +1,7 @@
 import axios from "axios";
-import { FormData} from "../pages/RegistrationForm";
+import { FormData } from "../pages/RegistrationForm";
 
-const API_URL = "http://localhost:8080/api/registration";
+const API_URL = "http://localhost:8080/api/users/register";
 
 export const registerCustomer = async (formData: FormData) => {
   try {
