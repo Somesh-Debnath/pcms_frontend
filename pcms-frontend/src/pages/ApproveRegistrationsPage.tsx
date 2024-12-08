@@ -1,8 +1,9 @@
-'use client'
+
 
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import NavigationBar from '../components/NavigationBar'
+import React from 'react'
 
 export default function ApproveRegistrationsPage() {
   const [registrations, setRegistrations] = useState([
@@ -32,9 +33,9 @@ export default function ApproveRegistrationsPage() {
     }
   ])
 
-  const [toasts, setToasts] = useState([])
+  const [toasts, setToasts] = useState<{ id: number; message: string }[]>([])
 
-  const addToast = (message) => {
+  const addToast = (message: string) => {
     const id = Date.now()
     setToasts(prev => [...prev, { id, message }])
     setTimeout(() => {
@@ -42,12 +43,12 @@ export default function ApproveRegistrationsPage() {
     }, 3000)
   }
 
-  const handleApprove = (id) => {
+  const handleApprove = (id: number) => {
     setRegistrations(prev => prev.filter(reg => reg.id !== id))
     addToast('Registration approved successfully')
   }
 
-  const handleReject = (id) => {
+  const handleReject = (id: number) => {
     setRegistrations(prev => prev.filter(reg => reg.id !== id))
     addToast('Registration rejected successfully')
   }

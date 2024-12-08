@@ -1,6 +1,7 @@
 import "../styles/PlanCard.css";
+import PropTypes from 'prop-types';
 
-export default function PlanCard({ plan, onOpenModal }) {
+function PlanCard({ plan, onOpenModal }) {
   return (
     <div className="plan-card">
       <p>Location: {plan.location}</p>
@@ -23,3 +24,14 @@ export default function PlanCard({ plan, onOpenModal }) {
     </div>
   );
 }
+
+PlanCard.propTypes = {
+  plan: PropTypes.shape({
+    location: PropTypes.string.isRequired,
+    planName: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+  }).isRequired,
+  onOpenModal: PropTypes.func.isRequired,
+};
+
+export default PlanCard;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, X, Edit2, Trash2, Calendar } from 'lucide-react';
-import NavigationBar from '../components/NavigationBar';
+import NavigationBar from "@/components/NavigationBar";
 import { addPlan, getAllPlans, deletePlan, updatePlan } from '@/services/PlansServices';
 import { Toaster, toast } from 'react-hot-toast';
 

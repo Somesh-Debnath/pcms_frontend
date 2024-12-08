@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export interface FormData {
   fullName: string;
   phoneNumber: string;
-  mailId: string;
+  email: string;
   ssn: string;
   addressLine1: string;
   addressLine2: string;
@@ -20,7 +20,7 @@ const RegistrationForm = () => {
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     phoneNumber: "",
-    mailId: "",
+    email: "",
     ssn: "",
     addressLine1: "",
     addressLine2: "",
@@ -52,6 +52,7 @@ const RegistrationForm = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    console.log("Form Data:", formData); // Log the form data
     const newErrors: Partial<FormData> = {};
     Object.keys(formData).forEach((key) => {
       if (!formData[key as keyof FormData]) {
@@ -77,7 +78,7 @@ const RegistrationForm = () => {
     setFormData({
       fullName: "",
       phoneNumber: "",
-      mailId: "",
+      email: "",
       ssn: "",
       addressLine1: "",
       addressLine2: "",
@@ -146,23 +147,23 @@ const RegistrationForm = () => {
             <div className="relative">
               <input
                 type="email"
-                name="mailId"
-                value={formData.mailId}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 placeholder="Email"
                 className="w-full px-6 py-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-green-700"
                 required
               />
-              {formData.mailId && (
+              {formData.email && (
                 <button
                   type="button"
-                  onClick={() => handleClear("mailId")}
+                  onClick={() => handleClear("email")}
                   className="absolute right-3 top-[35%] transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
                   ×
                 </button>
               )}
-              {errors.mailId && <p className="mt-1 text-sm text-red-500">{errors.mailId}</p>}
+              {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
               <p className="mt-1 text-sm text-gray-500">Enter your email</p>
             </div>
 

@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "module": "ES2022",                             /* Specify what module code is generated. */
+    "strict": true,                                   /* Enable all strict type-checking options. */
+    "esModuleInterop": true,                          /* Emit additional JavaScript to ease support for importing CommonJS modules. */
+    "skipLibCheck": true,                             /* Skip type checking all .d.ts files. */
+    "forceConsistentCasingInFileNames": true,         /* Ensure that casing is correct in imports. */
+    "jsx": "react",                                   /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    "baseUrl": ".",                                   /* Base directory to resolve non-relative module names. */
+    "paths": {
+      "@/*": ["src/*"]                                /* Alias @ to the src directory. */
+    }
+  },
+  "include": ["src"]                                  /* Include all files in the src directory. */
+}

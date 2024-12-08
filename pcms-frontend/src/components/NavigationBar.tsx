@@ -17,7 +17,7 @@ const NavigationBar = () => {
             <NavLink
               to="/plans"
               className="py-4 px-6 relative"
-              style={({ isActive }) => ({
+              style={({ isActive }: { isActive: boolean }) => ({
                 borderBottom: isActive ? '2px solid #5B9B6B' : 'none',
                 color: isActive ? '#5B9B6B' : 'inherit',
               })}
@@ -27,7 +27,7 @@ const NavigationBar = () => {
             <NavLink
               to="/approve-registrations"
               className="py-4 px-6 relative"
-              style={({ isActive }) => ({
+              style={({ isActive }: { isActive: boolean}) => ({
                 borderBottom: isActive ? '2px solid #5B9B6B' : 'none',
                 color: isActive ? '#5B9B6B' : 'inherit',
               })}
@@ -40,7 +40,7 @@ const NavigationBar = () => {
             <NavLink
               to="/approve-requested-plan"
               className="py-4 px-6 relative"
-              style={({ isActive }) => ({
+              style={({ isActive }: { isActive: boolean }) => ({
                 borderBottom: isActive ? '2px solid #5B9B6B' : 'none',
                 color: isActive ? '#5B9B6B' : 'inherit',
               })}

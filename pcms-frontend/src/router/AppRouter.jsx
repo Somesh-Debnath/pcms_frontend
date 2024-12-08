@@ -4,6 +4,7 @@ import PlansPage from "../pages/PlansPage";
 import RegistrationForm from "../pages/RegistrationForm";
 import ApproveRegistrationsPage from "../pages/ApproveRegistrationsPage";
 import ApproveRequestedPlan from "../pages/ApproveRequestedPlan";
+import Plans from "../pages/User/Plans";
 
 export default function AppRouter() {
   return (
@@ -14,6 +15,7 @@ export default function AppRouter() {
         <Route path="/plans" element={<PlansPage />} />
         <Route path="/approve-registrations" element={<ApproveRegistrationsPage />} />
         <Route path="/approve-requested-plan" element={<ApproveRequestedPlan/>}/>
+        <Route path="/user-plans" element={<Plans/>} />
       </Routes>
     </Router>
   );
