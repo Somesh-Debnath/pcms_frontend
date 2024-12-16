@@ -6,17 +6,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { LoadingOverlay } from './LoadingOverlay'
 import { ToastContainer, toast } from 'react-toastify'
+import { SubscriptionFormProps } from '@/interfaces/interfaces'
 import 'react-toastify/dist/ReactToastify.css'
-
-interface SubscriptionFormProps {
-  planDetails: Readonly<{
-    location: string
-    planName: string
-    price: number
-  }>
-  onSubscribe: (data: any) => void
-  onCancel: () => void
-}
 
 export function SubscriptionForm({ planDetails, onSubscribe, onCancel }: SubscriptionFormProps) {
   const [startDate, setStartDate] = React.useState('')

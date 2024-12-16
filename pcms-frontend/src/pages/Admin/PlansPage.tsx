@@ -1,29 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Search, X, Edit2, Trash2, Calendar } from 'lucide-react';
-import NavigationBar from '../components/NavigationBar';
-import { addPlan, getAllPlans, deletePlan, updatePlan } from '@/services/PlansServices';
-import { Toaster, toast } from 'react-hot-toast';
-
-export interface Plan {
-  planId?: number;
-  location: string;
-  planName: string;
-  price: number;
-}
+import React, { useState, useEffect } from "react";
+import { Search, X, Edit2, Trash2, Calendar } from "lucide-react";
+import NavigationBar from "../../components/NavigationBar";
+import {
+  createPlan,
+  getAllPlans,
+  deletePlan,
+  updatePlan,
+} from "@/services/PlansServices";
+import { Toaster, toast } from "react-hot-toast";
+import { useAuth } from "@/context/AuthContext";
+import { Plan } from "@/interfaces/interfaces";
 
 export default function PlansPage() {
-  const [searchLabel, setSearchLabel] = useState('');
+  const { user } = useAuth();
+  const [searchLabel, setSearchLabel] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('');
-  const [selectedDate, setSelectedDate] = useState('2023-08-17');
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [selectedDate, setSelectedDate] = useState("2023-08-17");
   const [allPlans, setAllPlans] = useState<Plan[]>([]);
   const [filteredPlans, setFilteredPlans] = useState<Plan[]>([]);
   const [editingPlan, setEditingPlan] = useState<Plan | null>(null);
 
   const [newPlan, setNewPlan] = useState({
-    location: '',
-    planName: '',
-    price: ''
+    location: "",
+    planName: "",
+    price: "",
   });
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function PlansPage() {
         setAllPlans(plans);
         setFilteredPlans(plans);
       } catch (error) {
-        console.error('Error fetching plans:', error);
+        console.error("Error fetching plans:", error);
       }
     };
 
@@ -44,59 +45,69 @@ export default function PlansPage() {
     const { name, value } = e.target;
     setNewPlan((prev) => ({
       ...prev,
-      [name]: value || ''
+      [name]: value || "",
     }));
   };
 
   const handleClearInput = (field: string) => {
     setNewPlan((prev) => ({
       ...prev,
-      [field]: ''
+      [field]: "",
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const plan = {
-      planId: editingPlan ? editingPlan.planId : Date.now(),
+    const plan: Plan = {
+      planId: editingPlan ? editingPlan.planId : 0,
       location: newPlan.location,
       planName: newPlan.planName,
-      price: Number(newPlan.price)
+      price: Number(newPlan.price)// Ensure price is a number
     };
+    console.log("Plan:", plan);
 
     try {
       if (editingPlan) {
-        await updatePlan(plan, plan.planId);
-        setAllPlans((prev) => prev.map((p) => (p.planId === plan.planId ? plan : p)));
-        setFilteredPlans((prev) => prev.map((p) => (p.planId === plan.planId ? plan : p)));
+        await updatePlan(plan);
+        setAllPlans((prev) =>
+          prev.map((p) => (p.planId === plan.planId ? { ...p, ...plan } : p))
+        );
+        setFilteredPlans((prev) =>
+          prev.map((p) => (p.planId === plan.planId ? { ...p, ...plan } : p))
+        );
+        toast.success("Plan updated successfully");
       } else {
-        const response: Plan = await addPlan(plan);
+        const response: Plan = await createPlan(plan);
         setAllPlans((prev) => [...prev, response]);
-        console.log('response:', response);
         setFilteredPlans((prev) => [...prev, response]);
+        toast.success("Plan added successfully");
       }
-      setNewPlan({ location: '', planName: '', price: '' });
+      setNewPlan({ location: "", planName: "", price: "" });
       setIsModalOpen(false);
       setEditingPlan(null);
     } catch (error) {
-      console.error('Error adding/updating plan:', error);
+      console.error("Error adding/updating plan:", error);
     }
   };
 
   const handleEdit = (plan: Plan) => {
     setEditingPlan(plan);
-    setNewPlan({ location: plan.location, planName: plan.planName, price: plan.price.toString() });
+    setNewPlan({
+      location: plan.location,
+      planName: plan.planName,
+      price: plan.price.toString(),
+    });
     setIsModalOpen(true);
   };
 
-  const handleDelete = async (planId: number) => {
+  const handleDelete = async (planId: number | undefined) => {
     try {
       await deletePlan(planId);
       setAllPlans((prev) => prev.filter((plan) => plan.planId !== planId));
       setFilteredPlans((prev) => prev.filter((plan) => plan.planId !== planId));
-      toast.error('Plan deleted successfully');
+      toast.error("Plan deleted successfully");
     } catch (error) {
-      console.error('Error deleting plan:', error);
+      console.error("Error deleting plan:", error);
     }
   };
 
@@ -104,25 +115,25 @@ export default function PlansPage() {
     const filtered = allPlans.filter(
       (plan) =>
         plan.location.toLowerCase().includes(searchLabel.toLowerCase()) &&
-        (selectedPlan === '' || plan.planName === selectedPlan)
+        (selectedPlan === "" || plan.planName === selectedPlan)
     );
     setFilteredPlans(filtered);
   }, [searchLabel, selectedPlan, allPlans]);
 
   const handleClear = () => {
-    setSearchLabel('');
-    setSelectedPlan('');
-    setSelectedDate('2023-08-17');
+    setSearchLabel("");
+    setSelectedPlan("");
+    setSelectedDate("2023-08-17");
   };
-
-  console.log('PlansPage rendered');
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
       <NavigationBar />
-      <Toaster/>
+      <Toaster />
       <main className="flex-1 px-8">
-        <h2 className="text-2xl mt-1 font-semibold text-[#5B9B6B] mb-6">Search Plans</h2>
+        <h2 className="text-2xl mt-1 font-semibold text-[#5B9B6B] mb-6">
+          Search Plans
+        </h2>
         <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="space-y-2">
@@ -137,7 +148,7 @@ export default function PlansPage() {
                 />
                 {searchLabel && (
                   <button
-                    onClick={() => setSearchLabel('')}
+                    onClick={() => setSearchLabel("")}
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     <X className="h-5 w-5" />
@@ -155,7 +166,9 @@ export default function PlansPage() {
                   className="w-full border rounded-md px-3 py-2 pr-10 appearance-none bg-white transition-all duration-300 focus:ring-2 focus:ring-[#5B9B6B] focus:border-transparent"
                 >
                   <option value="">Plan</option>
-                  {Array.from(new Set(allPlans.map((plan) => plan.planName))).map((planName) => (
+                  {Array.from(
+                    new Set(allPlans.map((plan) => plan.planName))
+                  ).map((planName) => (
                     <option key={planName} value={planName}>
                       {planName}
                     </option>
@@ -163,7 +176,7 @@ export default function PlansPage() {
                 </select>
                 {selectedPlan && (
                   <button
-                    onClick={() => setSelectedPlan('')}
+                    onClick={() => setSelectedPlan("")}
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
                     <X className="h-5 w-5" />
@@ -211,11 +224,16 @@ export default function PlansPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {filteredPlans.map((plan) => (
-            <div key={plan.planId} className="bg-[#E8F5E9] rounded-lg p-4 space-y-3">
+            <div
+              key={plan.planId}
+              className="bg-[#E8F5E9] rounded-lg p-4 space-y-3"
+            >
               <div className="flex justify-between items-start">
                 <div className="space-y-1">
                   <div className="text-gray-700">Location: {plan.location}</div>
-                  <div className="text-gray-700">Plan name: {plan.planName}</div>
+                  <div className="text-gray-700">
+                    Plan name: {plan.planName}
+                  </div>
                   <div className="text-gray-700">Price: ${plan.price}</div>
                 </div>
                 <div className="flex gap-2">
@@ -242,7 +260,9 @@ export default function PlansPage() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">{editingPlan ? 'Edit plan' : 'Add new plan'}</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {editingPlan ? "Edit plan" : "Add new plan"}
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <div className="relative">
@@ -258,7 +278,7 @@ export default function PlansPage() {
                   {newPlan.location && (
                     <button
                       type="button"
-                      onClick={() => handleClearInput('location')}
+                      onClick={() => handleClearInput("location")}
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
                       <X className="h-5 w-5" />
@@ -281,7 +301,7 @@ export default function PlansPage() {
                   {newPlan.planName && (
                     <button
                       type="button"
-                      onClick={() => handleClearInput('planName')}
+                      onClick={() => handleClearInput("planName")}
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
                       <X className="h-5 w-5" />
@@ -301,10 +321,10 @@ export default function PlansPage() {
                     className="w-full border rounded-md px-3 py-2 pr-10"
                     required
                   />
-                  {newPlan.price && (
+                  {!!newPlan.price && (
                     <button
                       type="button"
-                      onClick={() => handleClearInput('price')}
+                      onClick={() => handleClearInput("price")}
                       className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                     >
                       <X className="h-5 w-5" />
@@ -317,16 +337,20 @@ export default function PlansPage() {
                 <button
                   type="submit"
                   className="px-6 py-2 bg-[#5B9B6B] text-white rounded-md hover:bg-[#4A8A5A] transition-colors flex-1"
-                  onClick={() => toast.success(`${editingPlan ? 'Plan updated' : 'Plan added'} successfully`)}
                 >
-                  {editingPlan ? 'Update' : 'Add'}
+                  {editingPlan ? "Update" : "Add"}
                 </button>
                 <button
                   type="button"
                   onClick={() => {
                     setIsModalOpen(false);
                     setEditingPlan(null);
-                    toast.error(`${editingPlan ? 'Plan update' : 'Plan addition'} cancelled`);
+                    setNewPlan({ location: "", planName: "", price: 0 }); // Clear the form
+                    toast.error(
+                      `${
+                        editingPlan ? "Plan update" : "Plan addition"
+                      } cancelled`
+                    );
                   }}
                   className="px-6 py-2 border border-[#5B9B6B] text-[#5B9B6B] rounded-md hover:bg-gray-50 transition-colors flex-1"
                 >

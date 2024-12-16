@@ -1,22 +1,14 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Image from "../assets/image.png";
-import { registerCustomer } from "../services/CustomerRegistration";
 import { ToastContainer, toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-
-export interface FormData {
-  fullName: string;
-  phoneNumber: string;
-  email: string;
-  ssn: string;
-  addressLine1: string;
-  addressLine2: string;
-  password: string;
-  confirmPassword: string;
-  zipCode: string;
-}
+import { useAuth } from "@/context/AuthContext";
+import { FormData } from "@/interfaces/interfaces";
+import { useNavigate } from "react-router-dom";
 
 const RegistrationForm = () => {
+  const { register, isApproved } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
     fullName: "",
     phoneNumber: "",
@@ -30,6 +22,13 @@ const RegistrationForm = () => {
   });
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
+
+  useEffect(() => {
+    if (isApproved) {
+      toast.success('Your registration has been approved. You can now log in.');
+      navigate("/login");
+    }
+  }, [isApproved]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,14 +62,7 @@ const RegistrationForm = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      try {
-        const response = await registerCustomer(formData);
-        toast.success("User registered successfully! Await admin approval.");
-        console.log("Registration successful:", response);
-      } catch (error) {
-        toast.error("There was an error registering the customer.");
-        console.error("There was an error registering the customer:", error);
-      }
+      await register(formData);
     }
   };
 
