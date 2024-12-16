@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import NavigationBar from '../../components/NavigationBar';
-import { getAllUserPlans, updateUserPlanStatus } from '@/services/PlansServices';
+import { getUserPlans, updateUserPlanStatus } from '@/services/PlansServices';
 import { Plan, Toast, UserPlan } from '@/interfaces/interfaces';
 
 export default function ApproveRequestedPlanPage() {
@@ -11,7 +11,8 @@ export default function ApproveRequestedPlanPage() {
   useEffect(() => {
     const loadPlanRequests = async () => {
       try {
-        const data = await getAllUserPlans();
+        const data = await getUserPlans();
+        console.log('Data:', data);
         setPlanRequests(data.filter((plan: UserPlan) => plan.status === "new"));
         console.log('Plan requests:', planRequests);
       } catch (error) {

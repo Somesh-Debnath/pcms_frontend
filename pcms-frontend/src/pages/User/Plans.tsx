@@ -63,8 +63,8 @@ export default function PlansPage() {
     try {
       const userId = user?.id;
       const requestedDate = new Date().toISOString().split('T')[0];
+      const { planId, ...rest } = plan as Plan;
       const userPlan: UserPlan = {
-        userPlanId: plan.planId,
         planId: plan.planId!,
         userId: userId!,
         planName: plan.planName,
@@ -77,7 +77,7 @@ export default function PlansPage() {
         autoTerminated: subscriptionForm.autoTerminated,
         alertRequired: subscriptionForm.alertRequired,
         status: "new",
-        plans: [plan as Plan]
+        plans: [rest]
       };
       console.log(userPlan)
       await assignPlanToUser(userPlan);

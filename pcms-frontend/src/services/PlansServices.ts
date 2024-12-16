@@ -14,12 +14,12 @@ export const getAllPlans = async (): Promise<Plan[]> => {
     }
 }
 
-export const assignPlanToUser = async (userPlan: UserPlan) => {
+export const assignPlanToUser = async (userPlan: UserPlan): Promise<UserPlan> => {
   try {
     console.log('response', userPlan);
-    const response = await axios.post(`${USER_PLAN_API_URL}/assign`, {
+    const response = await axios.post<UserPlan>(`${USER_PLAN_API_URL}/assign`, 
       userPlan
-    });
+    );
     console.log('response', response);
     return response.data;
   } catch (error) {
@@ -28,9 +28,10 @@ export const assignPlanToUser = async (userPlan: UserPlan) => {
   }
 };
 
-export const getUserPlans = async () => {
+export const getUserPlans = async (): Promise<UserPlan[]> => {
   try {
-    const response = await axios.get(`${USER_PLAN_API_URL}/findAll`);
+    const response = await axios.get<UserPlan[]>(`${USER_PLAN_API_URL}/findAll`);
+    console.log('response', response);
     return response.data;
   } catch (error) {
     console.error('Error fetching user plans:', error);
@@ -92,13 +93,4 @@ export const deletePlan = async (id: number | undefined) => {
   }
 };
 
-export const getAllUserPlans = async () => {
-  try {
-    const response = await axios.get(`${USER_PLAN_API_URL}/findAll`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching user plans:', error);
-    throw error;
-  }
-}
 
