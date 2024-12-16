@@ -5,6 +5,7 @@ import { loginApi } from '../services/AuthService';
 import { toast } from 'react-toastify';
 import { FormData } from '@/interfaces/interfaces';
 import { useNavigate } from 'react-router-dom';
+import ProtectedRoute from '@/router/ProtectedRoute';
 
 interface AuthContextType {
   userRole: string;

@@ -40,12 +40,12 @@ const NavigationBar = () => {
           </button>
           {isDropdownOpen && (
             <div
-              className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-20"
+              className="absolute right-0 mt-auto top-14 w-48 bg-white rounded-md shadow-lg py-2 z-20"
               onMouseEnter={() => setIsDropdownOpen(true)}
               onMouseLeave={() => setIsDropdownOpen(false)}
             >
-              <div className="px-4 py-2 text-gray-700">
-                <span className="font-semibold">{user?.name}</span>
+              <div className="px-4 py-2 mt-auto text-gray-700">
+                <span className="font-semibold">{user?.fullName}</span>
               </div>
               <div className="border-t border-gray-200"></div>
               <button

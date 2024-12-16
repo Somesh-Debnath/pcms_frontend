@@ -32,7 +32,7 @@ export default function PlansPage() {
       try {
         const plans = await getAllPlans();
         setAllPlans(plans);
-        setFilteredPlans(plans);
+        //setFilteredPlans(plans);
       } catch (error) {
         console.error("Error fetching plans:", error);
       }

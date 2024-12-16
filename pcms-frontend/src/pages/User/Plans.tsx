@@ -3,7 +3,7 @@ import { X, Calendar, Plus, Loader2 } from 'lucide-react';
 
 import { Toaster, toast } from 'react-hot-toast';
 import { useAuth, User } from '@/context/AuthContext';
-import { getAllPlans, getUserPlans, assignPlanToUser, deletePlan } from '@/services/PlansServices';
+import { getAllPlans, getUserPlans, assignPlanToUser, deleteUserPlan } from '@/services/PlansServices';
 import { UserPlan, SubscriptionForm, Plan } from '@/interfaces/interfaces';
 import NavigationBar from '@/components/NavigationBar';
 
@@ -31,7 +31,7 @@ export default function PlansPage() {
       try {
         const plans = await getAllPlans();
         setAllPlans(plans);
-       // setFilteredPlans(plans);
+        //setFilteredPlans(plans);
       } catch (error) {
         console.error('Error fetching plans:', error);
       }
@@ -48,7 +48,7 @@ export default function PlansPage() {
         const plans = await getUserPlans();
         const approvedPlans = plans.filter((plan: UserPlan) => plan.status === 'APPROVED');
         console.log('approvedPlans', approvedPlans);
-        setFilteredPlans(approvedPlans);
+        //setFilteredPlans(approvedPlans);
         setUserPlans(approvedPlans);
       } catch (error) {
         console.error('Error fetching user plans:', error);
@@ -94,7 +94,7 @@ export default function PlansPage() {
   const handleUnsubscribe = async (userPlanId: number) => {
     setLoadingPlanId(userPlanId);
     try {
-      await deletePlan(userPlanId);
+      await deleteUserPlan(userPlanId);
       setUserPlans((prev) => prev.filter((plan) => plan.userPlanId !== userPlanId));
       //setUserPlans((prev) => prev.filter((plan) => plan.userPlanId !== userPlanId));
       toast.success('Successfully unsubscribed from the plan');

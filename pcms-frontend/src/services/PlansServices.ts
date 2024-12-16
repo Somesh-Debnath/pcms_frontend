@@ -85,10 +85,20 @@ export const updatePlan = async ( plan:Plan) : Promise<Plan> => {
 
 export const deletePlan = async (id: number | undefined) => {
   try {
-    const response = await axios.put(`${USER_PLAN_API_URL}/delete/${id}`);
+    const response = await axios.put(`${PLAN_API_URL}/deletePlan/${id}`);
     return response.data;
   } catch (error) {
     console.error('Error deleting plan:', error);
+    throw error;
+  }
+};
+
+export const deleteUserPlan = async (id: number | undefined) => {
+  try {
+    const response = await axios.put(`${USER_PLAN_API_URL}/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting user plan:', error);
     throw error;
   }
 };
