@@ -31,11 +31,31 @@ const LoginPage = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    }else{
-
-      await login(email, password, navigate);
+    } else {
+        const user = await getUserByEmail(email);
+        console.log(user);
+        if(user.status !== "APPROVED" && email !== "admin@example.com")
+        {
+          toast.error('Your account is not approved yet', {
+            style: {
+              background: '#f59e0b',
+              color: '#fff',
+            },
+          });
+        }
+      else{
+        await login(email, password, navigate);
+        if(email === "admin@example.com")
+        {
+          navigate('/admin-plans');
+        }
+        else
+        {
+          navigate('/user-plans');
+        }
     }
-}
+  }
+  };
 
   return (
     <div className="flex h-screen bg-gray-50">

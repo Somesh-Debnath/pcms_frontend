@@ -25,22 +25,13 @@ export const getRegistrations = async () => {
   }
 };
 
-export const approveRegistration = async (id: number | undefined) => {
+export const updateRegistration = async (id: number | undefined, status: string) => {
   try {
-    const response = await axios.put(`${USER_API_URL}/update/${id}`, { status: 'APPROVE' });
+    console.log('Updating registration:', id, status);
+    const response = await axios.put(`${USER_API_URL}/update/${id}`, {status});
     return response.data;
   } catch (error) {
     console.error("Error approving registration:", error);
-    throw error;
-  }
-}
-
-export const rejectRegistration = async (id: number| undefined) => {
-  try {
-    const response = await axios.put(`${USER_API_URL}/rejectUser/${id}`, { status: 'REJECT' });
-    return response.data;
-  } catch (error) {
-    console.error("Error rejecting registration:", error);
     throw error;
   }
 }

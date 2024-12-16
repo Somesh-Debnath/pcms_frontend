@@ -81,6 +81,10 @@ const RegistrationForm = () => {
     setErrors({});
   };
 
+  const handleLoginRedirect = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="hidden lg:block lg:w-2/5">
@@ -325,6 +329,13 @@ const RegistrationForm = () => {
                 Reset
               </button>
             </div>
+              <button
+                type="button"
+                onClick={handleLoginRedirect}
+                className="px-10 py-3 border-2 mt-16 border-green-700 text-green-700 rounded-full hover:bg-green-400 hover:text-white transition-colors"
+              >
+                Already Registered? Login
+              </button>
             </div>
           </div>
         </form>

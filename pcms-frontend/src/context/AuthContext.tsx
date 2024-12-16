@@ -66,7 +66,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await registerCustomer(formData);
       setUser(response);
-      navigate('/login');
       toast.success("User registered successfully! Await admin approval.");
       console.log("Registration successful:", response);
     } catch (error) {
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserRole(roles.USER);
         setUser(response);
         toast.success("User logged in successfully!");
-        navigate('/user-plans');
+        //navigate('/user-plans');
       }
     } catch (error) {
       toast.error("Invalid email or password.");

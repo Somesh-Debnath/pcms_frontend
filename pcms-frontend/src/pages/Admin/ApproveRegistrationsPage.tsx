@@ -3,12 +3,13 @@ import { X } from 'lucide-react';
 import NavigationBar from '@/components/NavigationBar';
 import React from 'react';
 import { User, useAuth } from '@/context/AuthContext';
-import { approveRegistration, rejectRegistration , getRegistrations} from '@/services/CustomerRegistration';
+import { getRegistrations, updateRegistration} from '@/services/CustomerRegistration';
 
 export default function ApproveRegistrationsPage() {
   const { setIsApproved } = useAuth();
   const [registrations, setRegistrations] = useState<User[]>([]);
   const [toasts, setToasts] = useState<{ id: number; message: string }[]>([]);
+  const [status, setStatus] = useState<string>('');
 
   useEffect(() => {
     const loadRegistrations = async () => {
@@ -30,14 +31,17 @@ export default function ApproveRegistrationsPage() {
 
   const handleApprove = async (id: number | undefined) => {
     setRegistrations((prev) => prev.filter((reg) => reg.id !== id));
-    await approveRegistration(id);
+    //setStatus('APPROVED');
+    await updateRegistration(id, "APPROVED");
     setIsApproved(true);
     addToast('Registration approved successfully');
   };
 
   const handleReject = async (id: number | undefined) => {
     setRegistrations((prev) => prev.filter((reg) => reg.id !== id));
-    await rejectRegistration(id);
+    //setStatus('REJECTED');
+    await updateRegistration(id, "REJECTED");
+    setIsApproved(false);
     addToast('Registration rejected successfully');
   };
 
