@@ -1,9 +1,10 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import Image from '../assets/image.png';
 import { useAuth } from '@/context/AuthContext';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { getUserByEmail } from '@/services/CustomerRegistration';
 
 const LoginPage = () => {
   const { login, user } = useAuth();
@@ -31,7 +32,19 @@ const LoginPage = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      await login(email, password, navigate);
+      const user = await getUserByEmail(email);
+      if(user.status !== "APPROVE")
+      {
+        toast.error('Your account is not approved yet', {
+          style: {
+            background: '#f59e0b',
+            color: '#fff',
+          },
+        });
+      }
+      else{
+        await login(email, password, navigate);
+      }
     }
   };
 

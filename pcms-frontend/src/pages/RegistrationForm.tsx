@@ -62,7 +62,7 @@ const RegistrationForm = () => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      await register(formData);
+      await register(formData, navigate);
     }
   };
 

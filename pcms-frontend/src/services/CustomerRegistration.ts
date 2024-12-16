@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FormData } from "../pages/RegistrationForm";
+import { User } from "@/context/AuthContext";
 
 const USER_API_URL = import.meta.env.VITE_APP_USER_API_URL || "";
 
@@ -44,3 +45,12 @@ export const rejectRegistration = async (id: number| undefined) => {
   }
 }
 
+export const getUserByEmail = async (email: string) : Promise<User> => {
+  try {
+    const response = await axios.get<User>(`${USER_API_URL}/getUser/${email}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    throw error;
+  }
+}

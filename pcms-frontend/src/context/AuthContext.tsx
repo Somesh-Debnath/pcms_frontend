@@ -11,7 +11,7 @@ interface AuthContextType {
   userRole: string;
   setUserRole: (role: string) => void;
   hasPermission: (permission: string) => boolean;
-  register: (formData: FormData) => Promise<void>;
+  register: (formData: FormData, navigate: ReturnType<typeof useNavigate>) => Promise<void>;
   login: (email: string, password: string, navigate: ReturnType<typeof useNavigate>) => Promise<void>;
   user: User | null;
   isApproved: boolean | undefined;
@@ -29,7 +29,7 @@ export interface User {
   addressLine2?: string;
   zipCode?: string;
   password?: string;
-  is_approved?: boolean;
+  status?: string;
   role: string;
   plan?: {
     name: string;
@@ -62,10 +62,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     console.log('User', user);
   }, [userRole, user]);
 
-  const register = async (formData: FormData) => {
+  const register = async (formData: FormData, navigate: ReturnType<typeof useNavigate>) => {
     try {
       const response = await registerCustomer(formData);
-      setUser(response.data);
+      setUser(response);
+      navigate('/login');
       toast.success("User registered successfully! Await admin approval.");
       console.log("Registration successful:", response);
     } catch (error) {
