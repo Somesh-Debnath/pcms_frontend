@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('userRole', userRole);
     localStorage.setItem('user', JSON.stringify(user));
-    console.log('User', user);
+    //console.log('User', user);
   }, [userRole, user]);
 
   const register = async (formData: FormData, navigate: ReturnType<typeof useNavigate>) => {
@@ -82,6 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUserRole(roles.ADMIN);
         setUser({ email: "admin@example.com", role: roles.ADMIN, fullName: "admin" });
         toast.success("Admin logged in successfully!");
+        console.log("User:", user);
         navigate('/admin-plans');
       } else {
         const response = await loginApi(email, password);

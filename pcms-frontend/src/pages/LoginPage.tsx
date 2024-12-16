@@ -31,22 +31,11 @@ const LoginPage = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-    } else {
-      const user = await getUserByEmail(email);
-      if(user.status !== "APPROVE")
-      {
-        toast.error('Your account is not approved yet', {
-          style: {
-            background: '#f59e0b',
-            color: '#fff',
-          },
-        });
-      }
-      else{
-        await login(email, password, navigate);
-      }
+    }else{
+
+      await login(email, password, navigate);
     }
-  };
+}
 
   return (
     <div className="flex h-screen bg-gray-50">

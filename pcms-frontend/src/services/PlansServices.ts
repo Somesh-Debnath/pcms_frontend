@@ -16,11 +16,11 @@ export const getAllPlans = async (): Promise<Plan[]> => {
 
 export const assignPlanToUser = async (userPlan: UserPlan): Promise<UserPlan> => {
   try {
-    console.log('response', userPlan);
+    console.log('payload', userPlan);
     const response = await axios.post<UserPlan>(`${USER_PLAN_API_URL}/assign`, 
       userPlan
     );
-    console.log('response', response);
+    console.log('responseassign', response);
     return response.data;
   } catch (error) {
     console.error('Error assigning plan to user:', error);

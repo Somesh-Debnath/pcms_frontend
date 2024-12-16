@@ -13,8 +13,10 @@ export default function ApproveRequestedPlanPage() {
       try {
         const data = await getUserPlans();
         console.log('Data:', data);
-        setPlanRequests(data.filter((plan: UserPlan) => plan.status === "new"));
-        console.log('Plan requests:', planRequests);
+        // Filter out plans that are approved or rejected only show new requests
+        const requests = data.filter((plan) => plan.status === 'new');
+        setPlanRequests(requests);
+        console.log('Plan rrequests:', requests);
       } catch (error) {
         console.error('Error loading plan requests:', error);
       }
