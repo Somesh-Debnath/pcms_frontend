@@ -18,8 +18,8 @@ export default function PlansPage() {
   const [isSearchingExisting, setIsSearchingExisting] = useState(false);
   const [loadingPlanId, setLoadingPlanId] = useState<number | null>(null);
   const [subscriptionForm, setSubscriptionForm] = useState<SubscriptionForm>({
-    startDate: '2023-08-17',
-    endDate: '2023-08-17',
+    startDate: '2024-10-17',
+    endDate: '2024-11-17',
     autoTerminated: false,
     alertRequired: false
   });
@@ -81,7 +81,7 @@ export default function PlansPage() {
       };
       console.log(userPlan)
       await assignPlanToUser(userPlan);
-      toast.success('Successfully subscribed to the plan');
+      toast.success('Plan request submitted successfully, awaiting admin approval');
       setIsModalOpen(false);
       setSubscribingPlan(null);
     } catch (error) {

@@ -16,7 +16,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/register" element={<RegistrationForm />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/register" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/admin-plans" element={<ProtectedRoute component={PlansPage} permission="view_plans" />} />
           <Route path="/approve-registrations" element={<ProtectedRoute component={ApproveRegistrationsPage} permission="approve_registrations" />} />

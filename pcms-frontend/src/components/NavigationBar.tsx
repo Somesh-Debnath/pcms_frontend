@@ -9,7 +9,6 @@ const NavigationBar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const [registrationsCount, setRegistrationsCount] = useState(0);
-  console.log(userRole);
 
   const handleLogout = () => {
     localStorage.removeItem('userRole');
