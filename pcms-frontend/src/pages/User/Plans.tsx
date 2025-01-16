@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Plus, Loader2 } from 'lucide-react';
-
+import { X, Calendar, Plus, Loader2, Download } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useAuth, User } from '@/context/AuthContext';
 import { getAllPlans, getUserPlans, assignPlanToUser, deleteUserPlan } from '@/services/PlansServices';
+import { calculateAndStoreBill, getCumulativeBill } from '@/services/BillService';
 import { UserPlan, SubscriptionForm, Plan } from '@/interfaces/interfaces';
 import NavigationBar from '@/components/NavigationBar';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default function PlansPage() {
   const { user } = useAuth();
@@ -31,7 +33,6 @@ export default function PlansPage() {
       try {
         const plans = await getAllPlans();
         setAllPlans(plans);
-        //setFilteredPlans(plans);
       } catch (error) {
         console.error('Error fetching plans:', error);
       }
@@ -44,11 +45,8 @@ export default function PlansPage() {
     const fetchUserPlans = async () => {
       try {
         const userId = user?.id;
-        console.log('userId', user);
         const plans = await getUserPlans();
         const approvedPlans = plans.filter((plan: UserPlan) => plan.status === 'APPROVED');
-        console.log('approvedPlans', approvedPlans);
-        //setFilteredPlans(approvedPlans);
         setUserPlans(approvedPlans);
       } catch (error) {
         console.error('Error fetching user plans:', error);
@@ -56,7 +54,7 @@ export default function PlansPage() {
     };
 
     fetchUserPlans();
-  }, []);
+  }, [user]);
 
   const handleSubscribe = async (plan: UserPlan) => {
     setLoadingPlanId(plan.planId ?? null);
@@ -79,7 +77,6 @@ export default function PlansPage() {
         status: "new",
         plans: [rest]
       };
-      console.log(userPlan)
       await assignPlanToUser(userPlan);
       toast.success('Plan request submitted successfully, awaiting admin approval');
       setIsModalOpen(false);
@@ -96,12 +93,51 @@ export default function PlansPage() {
     try {
       await deleteUserPlan(userPlanId);
       setUserPlans((prev) => prev.filter((plan) => plan.userPlanId !== userPlanId));
-      //setUserPlans((prev) => prev.filter((plan) => plan.userPlanId !== userPlanId));
       toast.success('Successfully unsubscribed from the plan');
     } catch (error) {
       toast.error('Failed to unsubscribe from the plan');
     } finally {
       setLoadingPlanId(null);
+    }
+  };
+
+  const handleDownloadBill = async () => {
+    try {
+      console.log('Downloading usage bill');
+      const doc = new jsPDF();
+      let cumulativeAmount = 0;
+      let usageData: any[] = [];
+      const userPlans = await getUserPlans();
+  
+      for (const userPlan of userPlans) {
+        // Call the calculate API to calculate and store the bill
+        usageData.push(await calculateAndStoreBill(userPlan.userPlanId, '2023-08-17', '2023-09-17'));
+        console.log('usageData', usageData);
+        cumulativeAmount += usageData[usageData.length - 1].billAmount;
+  
+        // Append usage data to allBreakdownData
+        
+      }
+
+  
+      // Add breakdown data to the PDF
+      let currentY = 20;
+      usageData.forEach((bill: any) => {
+        doc.text(`Usage Bill Breakdown for Plan: ${bill.userPlans.planName}`, 14, currentY);
+        doc.autoTable({
+          startY: currentY + 10,
+          head: [['Date', 'Usage', 'Amount']],
+          body: [[bill.usageDate, bill.usageAmount, bill.billAmount]],
+        });
+        currentY = doc.autoTable.previous.finalY + 20;
+      });
+  
+      // Add cumulative amount to the PDF
+      doc.text(`Total Cumulative Amount: $${cumulativeAmount}`, 14, currentY);
+      doc.save('usage_bill.pdf');
+      toast.success('Usage bill downloaded successfully');
+    } catch (error) {
+      toast.error('Failed to download usage bill');
     }
   };
 
@@ -127,6 +163,7 @@ export default function PlansPage() {
       <main className="flex-1 px-8 py-6">
         <h2 className="text-2xl text-[#5B9B6B] mb-4">Search Plans</h2>
         <div className="mb-6">
+          <div className='flex justify-between items-center'>
           <div className="inline-flex rounded-md shadow-sm mb-4">
             <button
               className={`px-4 py-2 text-sm font-medium ${
@@ -148,6 +185,14 @@ export default function PlansPage() {
             >
               Search existing plans
             </button>
+          </div>
+          <button
+            className="px-6 py-2 bg-[#5B9B6B] text-white rounded-md hover:bg-[#4A8A5A] transition-colors"
+            onClick={handleDownloadBill}
+          >
+            <Download className="h-5 w-5 inline-block mr-2" />
+            Download Bill
+          </button>
           </div>
         </div>
 
@@ -255,7 +300,19 @@ export default function PlansPage() {
                   <button
                     className="p-2 bg-[#5B9B6B] text-white rounded-full hover:bg-[#4A8A5A] transition-colors absolute bottom-4 right-4"
                     onClick={() => {
-                      setSubscribingPlan(plan);
+                      setSubscribingPlan({
+                        ...plan,
+                        requiredFrom: subscriptionForm.startDate,
+                        requiredTo: subscriptionForm.endDate,
+                        autoTerminated: subscriptionForm.autoTerminated,
+                        alertRequired: subscriptionForm.alertRequired,
+                        userPlanId: 0, // or any default value
+                        userId: user?.id || 0, // or any default value
+                        requestedBy: user?.fullName || '', // or any default value
+                        requestedDate: new Date().toISOString().split('T')[0],
+                        status: 'new',
+                        plans: [plan]
+                      });
                       setIsModalOpen(true);
                     }}
                     disabled={loadingPlanId === plan.planId}
